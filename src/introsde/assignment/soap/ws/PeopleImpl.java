@@ -30,9 +30,10 @@ public class PeopleImpl implements People {
     }
 
     @Override
-    public int addPerson(Person person) {
-        Person.savePerson(person);
-        return person.getIdPerson();
+    public Person addPerson(Person person) {
+        //TODO healthProfile add or check if a Person has an healtprofile and do all checking, currentProfile and send currentProfile in historyProfile
+    	Person.savePerson(person);
+        return person;
     }
 
     @Override
@@ -64,13 +65,17 @@ public class PeopleImpl implements People {
     }
 
     @Override
-    public int deletePerson(int id) {
+    public String deletePerson(int id) {
         Person p = Person.getPersonById(id);
         if (p!=null) {
             Person.removePerson(p);
-            return 0;
+            String id_person = Integer.toString(p.getIdPerson());
+            String messageOk = "The element: "+id_person+" has been deleted";
+            return messageOk;
         } else {
-            return -1;
+        	String id_person = Integer.toString(p.getIdPerson());
+        	String messageBad = "The element: "+id_person+" has not been deleted";
+            return messageBad;
         }
     }
     /*
