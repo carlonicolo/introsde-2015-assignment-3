@@ -16,11 +16,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -33,7 +35,11 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Entity
 @Table(name="HealthMeasureHistory")
-@NamedQuery(name="HealthMeasureHistory.findAll", query="SELECT h FROM HealthMeasureHistory h")
+@NamedQueries({
+	@NamedQuery(name="HealthMeasureHistory.findAll", query="SELECT h FROM HealthMeasureHistory h"),
+	@NamedQuery(name="HealthMeasureHistory.findByMeasure", query="SELECT h FROM HealthMeasureHistory h WHERE h.person = ?1 AND h.measureDefinition = ?2")
+})
+
 @XmlRootElement
 @XmlType(propOrder={"idMeasureHistory", "value" , "timestamp", "measureDefinition"})
 public class HealthMeasureHistory implements Serializable {
@@ -155,4 +161,23 @@ public class HealthMeasureHistory implements Serializable {
 	    tx.commit();
 	    LifeCoachDao.instance.closeConnections(em);
 	}
+	
+	
+	
+	public static List<HealthMeasureHistory> getByPersonMeasure(Person objP, MeasureDefinition idMeasureDef) {
+		EntityManager em = LifeCoachDao.instance.createEntityManager();
+		TypedQuery<HealthMeasureHistory> query = em.createNamedQuery("HealthMeasureHistory.findByMeasure", HealthMeasureHistory.class);
+		query.setParameter(1, objP);
+		query.setParameter(2, idMeasureDef);
+		List<HealthMeasureHistory> health_measure_history_list = query.getResultList();
+	    LifeCoachDao.instance.closeConnections(em);
+		return health_measure_history_list;
+	}
+	
+	
+	
+	
+	
+	
+	
 }

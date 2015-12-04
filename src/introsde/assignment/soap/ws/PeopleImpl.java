@@ -1,7 +1,10 @@
 package introsde.assignment.soap.ws;
+import introsde.assignment.soap.model.HealthMeasureHistory;
+import introsde.assignment.soap.model.MeasureDefinition;
 import introsde.assignment.soap.model.Person;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jws.WebService;
@@ -90,4 +93,23 @@ public class PeopleImpl implements People {
         }
     }
 	*/
+    
+	@Override
+	public List<HealthMeasureHistory> readPersonHistory(int id, String measureType) {
+		// TODO Auto-generated method stub
+		Person person = Person.getPersonById(id);
+        
+        //searches the measure definition associated with the name of the measure
+        MeasureDefinition md = new MeasureDefinition();
+        
+        
+        md = MeasureDefinition.getMeasureDefinitionByName(measureType);
+        
+        System.out.println("Person is: " + person.getIdPerson() + " " + person.getName() + " " + person.getLastname() + " " );
+        System.out.println("Md is: " + md.getIdMeasureDef());
+        
+        List<HealthMeasureHistory> list_measure = HealthMeasureHistory.getByPersonMeasure(person, md);
+        
+		return list_measure;
+	}
 }

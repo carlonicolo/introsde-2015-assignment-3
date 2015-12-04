@@ -1,4 +1,5 @@
 package introsde.assignment.soap.ws;
+import introsde.assignment.soap.model.HealthMeasureHistory;
 import introsde.assignment.soap.model.Person;
 
 import java.text.ParseException;
@@ -34,6 +35,14 @@ public interface People {
     @WebMethod(operationName="deletePerson")
     @WebResult(name="DeleteResult") 
     public String deletePerson(@WebParam(name="personId") int id);
+    
+    
+    //List should return the list of values (the history) of {measureType} (e.g. weight) for Person identified by {id}
+    
+    @WebMethod(operationName="readPersonHistory")
+    @WebResult(name="healthProfile-history")
+    public List<HealthMeasureHistory> readPersonHistory(@WebParam(name="personId") int id,@WebParam(name="measureType") String measureType);
+    
     
     /*
     @WebMethod(operationName="updatePersonHealthProfile")

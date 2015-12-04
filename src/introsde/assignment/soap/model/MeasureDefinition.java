@@ -15,7 +15,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name="MeasureDefinition")
-@NamedQuery(name="MeasureDefinition.findAll", query="SELECT m FROM MeasureDefinition m")
+
+/**
+ * The queries:
+ * - to get all measure definition
+ * - to get the measure definition that match with the value passed as parameter 
+ */
+@NamedQueries({
+	@NamedQuery(name="MeasureDefinition.findAll", query="SELECT m FROM MeasureDefinition m"),
+	@NamedQuery(name="MeasureDefinition.getMeasureDefinitionByName", query="SELECT d FROM MeasureDefinition d WHERE d.measureName = ?1 ")
+})
+
 @XmlRootElement
 public class MeasureDefinition implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -116,4 +126,31 @@ public class MeasureDefinition implements Serializable {
 	    tx.commit();
 	    LifeCoachDao.instance.closeConnections(em);
 	}
+	
+	
+	
+	//Query to retrive the name of the definition
+		/**
+		 * This method is use to get the measure definition name using a parameter
+		 * to search in the database and use it in the query.
+		 * E.i. getMeasureDefinitionByName(weight)
+		 * If the definition is not present it doesn't get anything
+		 * 
+		 * @param measureName is the name of the measure definition to search in the database
+		 * @return p the measure definition found
+		 */
+		public static MeasureDefinition getMeasureDefinitionByName(String measureName) {
+			EntityManager em = LifeCoachDao.instance.createEntityManager();
+			try{
+			MeasureDefinition p = em.createNamedQuery("MeasureDefinition.getMeasureDefinitionByName", MeasureDefinition.class).setParameter(1, measureName).getSingleResult();
+			LifeCoachDao.instance.closeConnections(em);
+			return p;
+			}catch(Exception e){
+				return null;
+			}
+		}
+	
+	
+	
+	
 }
