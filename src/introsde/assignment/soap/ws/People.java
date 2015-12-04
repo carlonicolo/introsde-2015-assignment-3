@@ -1,6 +1,7 @@
 package introsde.assignment.soap.ws;
 import introsde.assignment.soap.model.Person;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -27,8 +28,8 @@ public interface People {
     public int addPerson(@WebParam(name="person") Person person);
 
     @WebMethod(operationName="updatePerson")
-    @WebResult(name="personId") 
-    public int updatePerson(@WebParam(name="person") Person person);
+    @WebResult(name="person") 
+    public Person updatePerson(@WebParam(name="person") Person person)throws ParseException;
 
     @WebMethod(operationName="deletePerson")
     @WebResult(name="personId") 

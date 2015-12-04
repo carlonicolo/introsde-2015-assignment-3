@@ -1,6 +1,7 @@
 package introsde.assignment.soap.ws;
 import introsde.assignment.soap.model.Person;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.jws.WebService;
@@ -35,9 +36,31 @@ public class PeopleImpl implements People {
     }
 
     @Override
-    public int updatePerson(Person person) {
+    public Person updatePerson(Person person) throws ParseException {
         Person.updatePerson(person);
-        return person.getIdPerson();
+        Person existing = Person.getPersonById(person.getIdPerson());
+        //
+        int person_id = person.getIdPerson();
+
+        if (existing == null) {
+            //If the Person is not presents 
+        	System.out.println("There is no Person with the id: " + person_id);
+        } else {
+            person.setIdPerson(person_id);
+            if (person.getName() == null){
+            	person.setName(existing.getName());
+            }
+            if (person.getLastname() == null){
+            	person.setLastname(existing.getLastname());
+            }
+            if (person.getBirthdate() == null){
+            	person.setBirthdate(existing.getBirthdate());
+            }
+            person.setHealthMeasureHistories(existing.getHealthMeasureHistories());
+            Person.updatePerson(person);
+        }
+             
+        return person;
     }
 
     @Override
