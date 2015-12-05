@@ -4,9 +4,12 @@ import introsde.assignment.soap.dao.LifeCoachDao;
 import introsde.assignment.soap.model.Person;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +25,6 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.TypedQuery;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -37,11 +39,10 @@ import javax.xml.bind.annotation.XmlType;
 @Table(name="HealthMeasureHistory")
 @NamedQueries({
 	@NamedQuery(name="HealthMeasureHistory.findAll", query="SELECT h FROM HealthMeasureHistory h"),
-	@NamedQuery(name="HealthMeasureHistory.findByMeasure", query="SELECT h FROM HealthMeasureHistory h WHERE h.person = ?1 AND h.measureDefinition = ?2")
+	@NamedQuery(name="HealthMeasureHistory.readMeasureTypes", query="SELECT DISTINCT h.measureType FROM HealthMeasureHistory h")
 })
-
 @XmlRootElement
-@XmlType(propOrder={"idMeasureHistory", "value" , "timestamp", "measureDefinition"})
+@XmlType(propOrder={"idMeasureHistory", "timestamp", "measureType" , "value" , "measureValueType"})
 public class HealthMeasureHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -59,13 +60,13 @@ public class HealthMeasureHistory implements Serializable {
 
 	@Column(name="value")
 	private String value;
-
-	@ManyToOne
-	@JoinColumn(name = "idMeasureDef", referencedColumnName = "idMeasureDef")
-	private MeasureDefinition measureDefinition;
-
-	// notice that we haven't included a reference to the history in Person
-	// this means that we don't have to make this attribute XmlTransient
+	
+	@Column(name="measureType")
+	private String measureType;
+	
+	@Column(name="measureValueType")
+	private String measureValueType;
+	
 	@ManyToOne
 	@JoinColumn(name = "idPerson", referencedColumnName = "idPerson")
 	private Person person;
@@ -83,31 +84,42 @@ public class HealthMeasureHistory implements Serializable {
 	}
 	
 	@XmlElement(name="dateRegistered")
-	public Date getTimestamp() {
-		return this.timestamp;
+	public String getTimestamp() {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	    return df.format(timestamp);
 	}
 
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+	public void setTimestamp(String ts) throws ParseException {
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date date = format.parse(ts);
+		this.timestamp = date;
 	}
 	
 	@XmlElement(name="measureValue")
 	public String getValue() {
 		return this.value;
 	}
-
+	
 	public void setValue(String value) {
 		this.value = value;
 	}
 
-	public MeasureDefinition getMeasureDefinition() {
-	    return measureDefinition;
+	public void setMeasureType(String measureType) {
+		this.measureType = measureType;
+	}
+	
+	public String getMeasureType() {
+		return this.measureType;
 	}
 
-	public void setMeasureDefinition(MeasureDefinition param) {
-	    this.measureDefinition = param;
+	public void setMeasureValueType(String measureValueType) {
+		this.measureValueType = measureValueType;
 	}
-
+	
+	public String getMeasureValueType() {
+		return this.measureValueType;
+	}
+	
 	@XmlTransient
 	public Person getPerson() {
 	    return person;
@@ -162,22 +174,11 @@ public class HealthMeasureHistory implements Serializable {
 	    LifeCoachDao.instance.closeConnections(em);
 	}
 	
-	
-	
-	public static List<HealthMeasureHistory> getByPersonMeasure(Person objP, MeasureDefinition idMeasureDef) {
+	public static List<String> getMeasureTypes() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		TypedQuery<HealthMeasureHistory> query = em.createNamedQuery("HealthMeasureHistory.findByMeasure", HealthMeasureHistory.class);
-		query.setParameter(1, objP);
-		query.setParameter(2, idMeasureDef);
-		List<HealthMeasureHistory> health_measure_history_list = query.getResultList();
+	    List<String> list = em.createNamedQuery("HealthMeasureHistory.readMeasureTypes", String.class)
+	    		.getResultList();
 	    LifeCoachDao.instance.closeConnections(em);
-		return health_measure_history_list;
+	    return list;
 	}
-	
-	
-	
-	
-	
-	
-	
 }

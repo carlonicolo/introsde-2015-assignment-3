@@ -21,7 +21,7 @@ public interface People {
     public Person readPerson(@WebParam(name="personId") int id);
 
     @WebMethod(operationName="getPeopleList")
-    @WebResult(name="person") 
+    @WebResult(name="people") 
     public List<Person> getPeople();
 
     @WebMethod(operationName="createPerson")
@@ -30,19 +30,19 @@ public interface People {
 
     @WebMethod(operationName="updatePerson")
     @WebResult(name="person") 
-    public Person updatePerson(@WebParam(name="person") Person person)throws ParseException;
+    public Person updatePerson(@WebParam(name="person") Person person) throws ParseException;
 
     @WebMethod(operationName="deletePerson")
-    @WebResult(name="DeleteResult") 
+    @WebResult(name="personId") 
     public String deletePerson(@WebParam(name="personId") int id);
     
-    
-    //List should return the list of values (the history) of {measureType} (e.g. weight) for Person identified by {id}
-    
     @WebMethod(operationName="readPersonHistory")
-    @WebResult(name="healthProfile-history")
-    public List<HealthMeasureHistory> readPersonHistory(@WebParam(name="personId") int id,@WebParam(name="measureType") String measureType);
+    @WebResult(name="measure") 
+    public List<HealthMeasureHistory> readPersonHistory(@WebParam(name="personId") int id, @WebParam(name="measureType") String measureType);
     
+    @WebMethod(operationName="readMeasureTypes")
+    @WebResult(name="measureType") 
+    public List<String> readMeasureTypes();
     
     /*
     @WebMethod(operationName="updatePersonHealthProfile")

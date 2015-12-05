@@ -12,25 +12,23 @@ import java.util.Locale;
 
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.persistence.sessions.Session;
-import org.hibernate.annotations.Filter;
-
-
 
 @Entity  // indicates that this class is an entity to persist in DB
 @Table(name="Person") // to whole table must be persisted
 @NamedQueries({
 	@NamedQuery(name="Person.findAll", query="SELECT p FROM Person p"),
-	@NamedQuery(name="Person.currentHealth", query="SELECT h FROM HealthMeasureHistory h WHERE h.person = ?1 GROUP BY h.measureDefinition HAVING h.timestamp = MAX(h.timestamp)"),
-	@NamedQuery(name="Person.historyHealthProfile", query="SELECT h FROM HealthMeasureHistory h WHERE h.person = ?1 ")
+	@NamedQuery(name="Person.currentHealth", query="SELECT h FROM HealthMeasureHistory h "
+												+ "WHERE h.person = ?1 "
+												+ "GROUP BY h.measureType "
+												+ "HAVING h.timestamp = MAX(h.timestamp)"),
+	@NamedQuery(name="Person.readHistory", query="SELECT h FROM HealthMeasureHistory h "
+												+ "WHERE h.person = ?1 AND h.measureType LIKE ?2")
 })
 @XmlRootElement
 @XmlType(propOrder={"idPerson", "name", "lastname" , "birthdate", "healthMeasureHistories"})
@@ -41,45 +39,29 @@ public class Person implements Serializable {
     @TableGenerator(name="sqlite_person", table="sqlite_sequence",
         pkColumnName="name", valueColumnName="seq",
         pkColumnValue="Person")
+    
     @Column(name="idPerson")
     private int idPerson;
+    
     @Column(name="lastname")
     private String lastname;
+    
     @Column(name="name")
     private String name;
+    
     @Column(name="username")
     private String username;
+    
     @Temporal(TemporalType.DATE) // defines the precision of the date attribute
     @Column(name="birthdate")
     private Date birthdate; 
+    
     @Column(name="email")
     private String email;
     
-    // mappedBy must be equal to the name of the attribute in LifeStatus that maps this relation
-    //@OneToMany(mappedBy="person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    //private List<LifeStatus> lifeStatus;
-    
     @OneToMany(mappedBy="person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    private List<HealthMeasureHistory> healthMeasureHistories;
+    private List<HealthMeasureHistory> healthMeasureHistories; 
     
-    @XmlElement(name="currentHealth")
-    public List<HealthMeasureHistory> getHealthMeasureHistories() {
-		return this.getQueryCurrentHealth();
-	}
-    
-    
-    public void setHealthMeasureHistories(List<HealthMeasureHistory> param) {
-		this.healthMeasureHistories = param;
-	}
-    /*
-    @XmlElementWrapper(name = "Measurements")
-    @XmlTransient
-    public List<LifeStatus> getLifeStatus() {
-        return this.lifeStatus;
-    }
-    public void setLifeStatus(List<LifeStatus> param) {
-        this.lifeStatus = param;
-    }*/
     // add below all the getters and setters of all the private attributes
     
     // getters
@@ -99,15 +81,23 @@ public class Person implements Serializable {
         return username;
     }
     public String getBirthdate(){
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        // Get the date today using Calendar object.
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return df.format(birthdate);
-        //return birthdate;
     }
     @XmlTransient
     public String getEmail(){
         return email;
     }
+    
+    @XmlElementWrapper(name="currentHealth")
+    @XmlElement(name="measure")
+    public List<HealthMeasureHistory> getHealthMeasureHistories() {
+		return this.getQueryCurrentHealth();
+	}
+    
+    public List<HealthMeasureHistory> getHMHistories() {
+		return this.healthMeasureHistories;
+	}
     
     // setters
     public void setIdPerson(int idPerson){
@@ -123,14 +113,16 @@ public class Person implements Serializable {
         this.username = username;
     }
     public void setBirthdate(String bd) throws ParseException{
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date date = format.parse(bd);
         this.birthdate = date;
-        //this.birthdate = bd;
     }
     public void setEmail(String email){
         this.email = email;
-    }
+    }   
+    public void setHealthMeasureHistories(List<HealthMeasureHistory> param) {
+		this.healthMeasureHistories = param;
+	}
     
     public static Person getPersonById(int personId) {
         EntityManager em = LifeCoachDao.instance.createEntityManager();
@@ -181,6 +173,16 @@ public class Person implements Serializable {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 	    List<HealthMeasureHistory> list = em.createNamedQuery("Person.currentHealth", HealthMeasureHistory.class)
 	    		.setParameter(1, this)
+	    		.getResultList();
+	    LifeCoachDao.instance.closeConnections(em);
+	    return list;
+	}
+
+	public static List<HealthMeasureHistory> getHistory(Person p, String measureType) {
+		EntityManager em = LifeCoachDao.instance.createEntityManager();
+	    List<HealthMeasureHistory> list = em.createNamedQuery("Person.readHistory", HealthMeasureHistory.class)
+	    		.setParameter(1, p)
+	    		.setParameter(2, measureType)
 	    		.getResultList();
 	    LifeCoachDao.instance.closeConnections(em);
 	    return list;
