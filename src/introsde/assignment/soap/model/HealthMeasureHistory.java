@@ -181,4 +181,7 @@ public class HealthMeasureHistory implements Serializable {
 	    LifeCoachDao.instance.closeConnections(em);
 	    return list;
 	}
+	
+	
+	
 }

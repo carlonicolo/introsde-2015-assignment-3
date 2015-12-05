@@ -44,6 +44,11 @@ public interface People {
     @WebResult(name="measureType") 
     public List<String> readMeasureTypes();
     
+    @WebMethod(operationName="readPersonMeasure")
+    @WebResult(name="measureType") 
+    public int readPersonMeasure(@WebParam(name="personId") int id, @WebParam(name="measureType") String measureType, @WebParam(name="mid") int mid );
+    
+    
     /*
     @WebMethod(operationName="updatePersonHealthProfile")
     @WebResult(name="hpId") 

@@ -106,6 +106,21 @@ public class PeopleImpl implements People {
     	System.out.println("%%%%%%%%%%"+l.get(1).toString());
     	return HealthMeasureHistory.getMeasureTypes();
     }
+
+    //Method #8
+	@Override
+	public int readPersonMeasure(int id, String measureType, int mid) {
+		Person p = Person.getPersonById(id);
+        List<HealthMeasureHistory> value = null;
+        if (p!=null) {
+            System.out.println("---> Found Person by id = "+id+" => "+p.getName());
+            value = Person.getHistoryValue(p,measureType,mid);
+        } else {
+            System.out.println("---> Didn't find any Person with  id = "+id);
+        }
+    	//return history;
+        return Integer.parseInt(value.get(0).getValue());
+	}
     
     /*
     @Override

@@ -28,7 +28,10 @@ import javax.xml.bind.annotation.XmlType;
 												+ "GROUP BY h.measureType "
 												+ "HAVING h.timestamp = MAX(h.timestamp)"),
 	@NamedQuery(name="Person.readHistory", query="SELECT h FROM HealthMeasureHistory h "
-												+ "WHERE h.person = ?1 AND h.measureType LIKE ?2")
+												+ "WHERE h.person = ?1 AND h.measureType LIKE ?2"),
+	@NamedQuery(name="Person.readHistoryValue", query="SELECT h FROM HealthMeasureHistory h "
+			+ "WHERE h.person = ?1 AND h.measureType LIKE ?2 AND h.idMeasureHistory LIKE ?3 ")
+	
 })
 @XmlRootElement
 @XmlType(propOrder={"idPerson", "name", "lastname" , "birthdate", "healthMeasureHistories"})
@@ -187,4 +190,20 @@ public class Person implements Serializable {
 	    LifeCoachDao.instance.closeConnections(em);
 	    return list;
 	}
+	
+	
+	public static List<HealthMeasureHistory> getHistoryValue(Person p, String measureType, int idMeasureHistory) {
+		EntityManager em = LifeCoachDao.instance.createEntityManager();
+	    List<HealthMeasureHistory> list = em.createNamedQuery("Person.readHistoryValue", HealthMeasureHistory.class)
+	    		.setParameter(1, p)
+	    		.setParameter(2, measureType)
+	    		.setParameter(3, idMeasureHistory)
+	    		.getResultList();
+	    LifeCoachDao.instance.closeConnections(em);
+	    return list;
+	}
+	
+	
+	
+	
 }
