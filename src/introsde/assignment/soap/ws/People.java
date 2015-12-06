@@ -13,6 +13,8 @@ import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
+import org.eclipse.persistence.history.HistoryPolicy;
+
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use=Use.LITERAL) //optional
 public interface People {
@@ -33,7 +35,7 @@ public interface People {
     public Person updatePerson(@WebParam(name="person") Person person) throws ParseException;
 
     @WebMethod(operationName="deletePerson")
-    @WebResult(name="personId") 
+    @WebResult(name="deleteNotification") 
     public String deletePerson(@WebParam(name="personId") int id);
     
     @WebMethod(operationName="readPersonHistory")
@@ -45,12 +47,16 @@ public interface People {
     public List<String> readMeasureTypes();
     
     @WebMethod(operationName="readPersonMeasure")
-    @WebResult(name="measureType") 
+    @WebResult(name="measureValue") 
     public int readPersonMeasure(@WebParam(name="personId") int id, @WebParam(name="measureType") String measureType, @WebParam(name="mid") int mid );
     
     @WebMethod(operationName="savePersonMeasure")
-    @WebResult(name="measureType") 
-    public Person savePersonMeasure(@WebParam(name="personId") int id, @WebParam(name="measureType") HealthMeasureHistory measure )throws ParseException;
+    @WebResult(name="measure") 
+    public List<HealthMeasureHistory> savePersonMeasure(@WebParam(name="personId") int id, @WebParam(name="measure") HealthMeasureHistory measure )throws ParseException;
+    
+    @WebMethod(operationName="updatePersonMeasure")
+    @WebResult(name="measure") 
+    public HealthMeasureHistory updatePersonMeasure(@WebParam(name="personId") int id, @WebParam(name="measure") HealthMeasureHistory measure )throws ParseException;
     
     
     /*

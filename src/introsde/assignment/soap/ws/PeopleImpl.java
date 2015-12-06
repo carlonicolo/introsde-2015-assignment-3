@@ -124,15 +124,37 @@ public class PeopleImpl implements People {
 
 	//Method #9
 	@Override
-	public Person savePersonMeasure(int id, HealthMeasureHistory measure) throws ParseException {
+	public List<HealthMeasureHistory> savePersonMeasure(int id, HealthMeasureHistory measure) throws ParseException {
 		Person p = Person.getPersonById(id);
 		measure.setPerson(p);
-		measure.setMeasureType("weight");
-		measure.setMeasureValueType("Int");
-		measure.setValue("90");
-		measure.setTimestamp("2015-12-12");
-		HealthMeasureHistory.saveHealthMeasureHistory(measure);
-		return p;
+		
+		//measure.setMeasureType("weight");
+		//measure.setMeasureValueType("Int");
+		//measure.setValue("90");
+		//measure.setTimestamp("2015-12-12");
+		
+		HealthMeasureHistory h = HealthMeasureHistory.saveHealthMeasureHistory(measure);
+		List<HealthMeasureHistory> history = null;
+		history = Person.getHistory(p,measure.getMeasureType());
+		
+		return history;
+	}
+
+	@Override
+	public HealthMeasureHistory updatePersonMeasure(int id, HealthMeasureHistory measure) throws ParseException {
+		Person p = Person.getPersonById(id);
+		
+		
+		HealthMeasureHistory existing = HealthMeasureHistory.getHealthMeasureHistoryById(measure.getIdMeasureHistory());
+		existing.setMeasureType(measure.getMeasureType());
+		existing.setTimestamp(measure.getTimestamp());
+		existing.setMeasureValueType(measure.getMeasureValueType());
+		existing.setValue(measure.getValue());
+		
+    	//existing.setValue(measure.getValue());
+    	HealthMeasureHistory.updateHealthMeasureHistory(existing);
+ 
+		return existing;
 	}
     
 	
