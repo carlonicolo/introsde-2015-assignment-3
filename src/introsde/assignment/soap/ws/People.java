@@ -28,7 +28,7 @@ public interface People {
 
     @WebMethod(operationName="createPerson")
     @WebResult(name="person") 
-    public Person addPerson(@WebParam(name="person") Person person);
+    public Person addPerson(@WebParam(name="person") Person person) throws ParseException;
 
     @WebMethod(operationName="updatePerson")
     @WebResult(name="person") 

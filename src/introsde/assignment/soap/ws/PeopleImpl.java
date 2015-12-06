@@ -63,7 +63,7 @@ public class PeopleImpl implements People {
     
     //Method #4
     @Override
-    public Person addPerson(Person person) {
+    public Person addPerson(Person person) throws ParseException {
     	System.out.println("//////////"+person.getHMHistories());
         Person p = Person.savePerson(person);
         return p;
@@ -103,7 +103,7 @@ public class PeopleImpl implements People {
     @Override
     public List<String> readMeasureTypes(){
     	List<String> l = HealthMeasureHistory.getMeasureTypes();
-    	System.out.println("%%%%%%%%%%"+l.get(1).toString());
+    	//System.out.println("%%%%%%%%%%"+l.get(1).toString());
     	return HealthMeasureHistory.getMeasureTypes();
     }
 
@@ -140,6 +140,7 @@ public class PeopleImpl implements People {
 		return history;
 	}
 
+	//Method #10
 	@Override
 	public HealthMeasureHistory updatePersonMeasure(int id, HealthMeasureHistory measure) throws ParseException {
 		Person p = Person.getPersonById(id);
