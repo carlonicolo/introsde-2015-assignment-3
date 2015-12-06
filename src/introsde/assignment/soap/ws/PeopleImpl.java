@@ -68,6 +68,16 @@ public class PeopleImpl implements People {
         Person p = Person.savePerson(person);
         return p;
     }
+    
+    
+    //Method #4-1
+    @Override
+	public Person addPersonFull(Person person, HealthMeasureHistory measure) throws ParseException {
+    	Person p = Person.savePerson(person);
+    	savePersonMeasure(p.getIdPerson(), measure);
+		return readPerson(p.getIdPerson());
+	}
+    
       
     //Method #5
     @Override
@@ -103,7 +113,6 @@ public class PeopleImpl implements People {
     @Override
     public List<String> readMeasureTypes(){
     	List<String> l = HealthMeasureHistory.getMeasureTypes();
-    	//System.out.println("%%%%%%%%%%"+l.get(1).toString());
     	return HealthMeasureHistory.getMeasureTypes();
     }
 
@@ -127,11 +136,6 @@ public class PeopleImpl implements People {
 	public List<HealthMeasureHistory> savePersonMeasure(int id, HealthMeasureHistory measure) throws ParseException {
 		Person p = Person.getPersonById(id);
 		measure.setPerson(p);
-		
-		//measure.setMeasureType("weight");
-		//measure.setMeasureValueType("Int");
-		//measure.setValue("90");
-		//measure.setTimestamp("2015-12-12");
 		
 		HealthMeasureHistory h = HealthMeasureHistory.saveHealthMeasureHistory(measure);
 		List<HealthMeasureHistory> history = null;
@@ -157,19 +161,6 @@ public class PeopleImpl implements People {
  
 		return existing;
 	}
-    
+
 	
-	
-    /*
-    @Override
-    public int updatePersonHP(int id, LifeStatus hp) {
-        LifeStatus ls = LifeStatus.getLifeStatusById(hp.getIdMeasure());
-        if (ls.getPerson().getIdPerson() == id) {
-            LifeStatus.updateLifeStatus(hp);
-            return hp.getIdMeasure();
-        } else {
-            return -1;
-        }
-    }
-	*/
 }

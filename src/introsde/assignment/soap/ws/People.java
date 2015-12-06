@@ -22,13 +22,17 @@ public interface People {
     @WebResult(name="person") 
     public Person readPerson(@WebParam(name="personId") int id);
 
-    @WebMethod(operationName="getPeopleList")
+    @WebMethod(operationName="readPersonList")
     @WebResult(name="people") 
     public List<Person> getPeople();
 
     @WebMethod(operationName="createPerson")
     @WebResult(name="person") 
     public Person addPerson(@WebParam(name="person") Person person) throws ParseException;
+    
+    @WebMethod(operationName="createFullPerson")
+    @WebResult(name="person") 
+    public Person addPersonFull(@WebParam(name="person") Person person, @WebParam(name="measure") HealthMeasureHistory measure ) throws ParseException;
 
     @WebMethod(operationName="updatePerson")
     @WebResult(name="person") 
