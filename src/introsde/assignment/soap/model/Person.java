@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 			+ "WHERE h.person = ?1 AND h.measureType LIKE ?2 AND h.idMeasureHistory LIKE ?3 ")
 	
 })
-@XmlRootElement
+//@XmlRootElement
 @XmlType(propOrder={"idPerson", "name", "lastname" , "birthdate", "healthMeasureHistories"})
 public class Person implements Serializable {
     private static final long serialVersionUID = 1L;

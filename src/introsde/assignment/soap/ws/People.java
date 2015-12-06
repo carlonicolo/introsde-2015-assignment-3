@@ -58,10 +58,4 @@ public interface People {
     @WebResult(name="measure") 
     public HealthMeasureHistory updatePersonMeasure(@WebParam(name="personId") int id, @WebParam(name="measure") HealthMeasureHistory measure )throws ParseException;
     
-    
-    /*
-    @WebMethod(operationName="updatePersonHealthProfile")
-    @WebResult(name="hpId") 
-    public int updatePersonHP(@WebParam(name="personId") int id, @WebParam(name="healthProfile") LifeStatus hp);
-    */
 }

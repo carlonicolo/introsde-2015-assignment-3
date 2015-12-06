@@ -41,7 +41,8 @@ import javax.xml.bind.annotation.XmlType;
 	@NamedQuery(name="HealthMeasureHistory.findAll", query="SELECT h FROM HealthMeasureHistory h"),
 	@NamedQuery(name="HealthMeasureHistory.readMeasureTypes", query="SELECT DISTINCT h.measureType FROM HealthMeasureHistory h")
 })
-@XmlRootElement
+
+//@XmlRootElement
 @XmlType(propOrder={"idMeasureHistory", "timestamp", "measureType" , "value" , "measureValueType"})
 public class HealthMeasureHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
