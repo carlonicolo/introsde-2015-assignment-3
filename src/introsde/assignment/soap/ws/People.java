@@ -48,6 +48,10 @@ public interface People {
     @WebResult(name="measureType") 
     public int readPersonMeasure(@WebParam(name="personId") int id, @WebParam(name="measureType") String measureType, @WebParam(name="mid") int mid );
     
+    @WebMethod(operationName="savePersonMeasure")
+    @WebResult(name="measureType") 
+    public Person savePersonMeasure(@WebParam(name="personId") int id, @WebParam(name="measureType") HealthMeasureHistory measure )throws ParseException;
+    
     
     /*
     @WebMethod(operationName="updatePersonHealthProfile")

@@ -121,7 +121,22 @@ public class PeopleImpl implements People {
     	//return history;
         return Integer.parseInt(value.get(0).getValue());
 	}
+
+	//Method #9
+	@Override
+	public Person savePersonMeasure(int id, HealthMeasureHistory measure) throws ParseException {
+		Person p = Person.getPersonById(id);
+		measure.setPerson(p);
+		measure.setMeasureType("weight");
+		measure.setMeasureValueType("Int");
+		measure.setValue("90");
+		measure.setTimestamp("2015-12-12");
+		HealthMeasureHistory.saveHealthMeasureHistory(measure);
+		return p;
+	}
     
+	
+	
     /*
     @Override
     public int updatePersonHP(int id, LifeStatus hp) {
