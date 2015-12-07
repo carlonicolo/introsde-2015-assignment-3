@@ -1,7 +1,7 @@
 # Introsde 2015 Assignment#3(SERVER): SOAP Web Services
 This is the third assignment for the "Introduction to Service Design and Engineering" course. The assignment is composed by two parts:
 * The **Server** that exposes SOAP Web Services, and that is deployied on Heroku. ***This README is about the server*** 
-* The [**Client**](https://github.com/carlonicolo/introsde-2015-assignment-3-client) that call each of server implemented services and prints the result. [**Here**](https://github.com/carlonicolo/introsde-2015-assignment-3-client/blob/master/README.md) there is the README for the client.  
+* The [**Client**](https://github.com/carlonicolo/introsde-2015-assignment-3-client) that calls each of server implemented services and prints the result. [**Here**](https://github.com/carlonicolo/introsde-2015-assignment-3-client/blob/master/README.md) there is the README for the client.  
 
 In this assignment is requested to implement a server and a client calling this server. </br>
 The server is deployed on Heroku.</br>
@@ -43,7 +43,7 @@ Using JAX-WS, implement CRUD services for the following model including the foll
 
 
 ## @WebServices
-Below is showed the class People.java Interface where are written the methods that have been implemented according to the assignment
+Below is showed the class [People.java](https://github.com/carlonicolo/introsde-2015-assignment-3/blob/master/src/introsde/assignment/soap/ws/People.java) Interface where are written the methods that have been implemented according to the assignment
 
 ```java
 @WebService
@@ -96,7 +96,7 @@ public interface People {
 }
 ```
 
-I commented the class [PeopleImpl.java] (https://github.com/carlonicolo/introsde-2015-assignment-3/blob/master/src/introsde/assignment/soap/ws/People.java) , that implements the People.java interface, then if you have any dubtsyou can check the comments that i made there.
+I commented the class [PeopleImpl.java] (https://github.com/carlonicolo/introsde-2015-assignment-3/blob/master/src/introsde/assignment/soap/ws/People.java) , that implements the [People.java](https://github.com/carlonicolo/introsde-2015-assignment-3/blob/master/src/introsde/assignment/soap/ws/People.java) interface, then if you have any dubtsyou can check the comments that i made there.
 
 
 ## How to run
@@ -107,7 +107,7 @@ As specified and requested by the assignment, the server runs on Heroku:
 So for using this server according to the assignment requests, you need to check the [client](https://github.com/carlonicolo/introsde-2015-assignment-3-client) that i implemented. In the [client README](https://github.com/carlonicolo/introsde-2015-assignment-3-client/blob/master/README.md) i explained how it works and how run it. 
 
 
-By the way if you want to try the server, using (e.g) the client [Postman](https://www.getpostman.com/), and execute the service readPerson(int id) you need to send the request in this way: </br>
+By the way if you want to try the server, using (e.g) the client [Postman](https://www.getpostman.com/), and execute for example the service readPerson(int id) you need to send the request in this way: </br>
 
 ```xml
 <soap:Envelope
