@@ -7,19 +7,42 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-//Service Implementation
 
+/**
+ * In this class are implemented all the methods requested
+ * by the assignemnt.
+ * 
+ * This class implements the interface People and defines
+ * all methods that must be implemented in order to 
+ * connet to the reserver and execute some actions
+ * 
+ * @author Carlo Nicolo'
+ *
+ */
 @WebService(endpointInterface = "introsde.assignment.soap.ws.People",
     serviceName="PeopleService")
 public class PeopleImpl implements People {
 	  
-    //Method #1
+    /**
+     * This methods is used to get all people stored in the database
+     * 
+     * Method #1: readPersonList()
+     * 
+     */
     @Override
     public List<Person> getPeople() {
         return Person.getAll();
     }
     
-    //Method #2
+    /**
+     * This method is used to get all information about the person
+     * with the "id" specified in the param 
+     * 
+     * Method #2: readPerson(int id)
+     * 
+     * 
+     * @param id the id of the person that we want read from the database
+     */
     @Override
     public Person readPerson(int id) {
         System.out.println("---> Reading Person by id = "+id);
@@ -32,7 +55,14 @@ public class PeopleImpl implements People {
         return p;
     }
     
-    //Method #3
+    /**
+     * This method is used to update the information of a person corresponding to
+     * the param passed in the method through 
+     * 
+     * Method #3: updatePerson(Person p)
+     * 
+     * @param person the person for which we want update the information
+     */
     @Override
     public Person updatePerson(Person person) throws ParseException{
         Person.updatePerson(person);
@@ -61,7 +91,15 @@ public class PeopleImpl implements People {
         return person;
     }
     
-    //Method #4
+    /**
+     * This method is used to create a new person
+     * using the param of Type Person passed through the method
+     * 
+     * Method #4: createPerson(Person p)
+     * 
+     * @param person is the person that we want add
+     * 
+     */
     @Override
     public Person addPerson(Person person) throws ParseException {
     	System.out.println("//////////"+person.getHMHistories());
@@ -69,8 +107,17 @@ public class PeopleImpl implements People {
         return p;
     }
     
-    
-    //Method #4-1
+    /**
+     * This method is used to create a new person also with a measure
+     * using the params passed in the method.
+     * 
+     * Method #11: createPerson(Person p, HealthMeasureHistory measure)
+     * 
+     * @param person is the person with all information that we want create
+     * @param measure represents the object HealthMeasureHistory containing all information inside 
+     * for creating a new measure
+     * 
+     */
     @Override
 	public Person addPersonFull(Person person, HealthMeasureHistory measure) throws ParseException {
     	Person p = Person.savePerson(person);
@@ -79,7 +126,15 @@ public class PeopleImpl implements People {
 	}
     
       
-    //Method #5
+    /**
+     * This method is used for deleting a person
+     * with the id passed as function param
+     * 
+     * Method #5: deletePerson(int id)
+     * 
+     * @param id is the id of person that we want delete
+     * 
+     */
     @Override
     public String deletePerson(int id) {
         Person p = Person.getPersonById(id);
@@ -96,6 +151,17 @@ public class PeopleImpl implements People {
     }
     
     //Method #6
+    /**
+     * This method is used for getting the person History,
+     * all the measurements of a determinate type for a specified person
+     * identified by "id"
+     * 
+     * Method #6: readPersonHistory(int id, String measureType)
+     * 
+     * @param id the person id for which we want search the measureType
+     * @param measureType the measureType for which we want search the history
+     * 
+     */
     @Override
     public List<HealthMeasureHistory> readPersonHistory(int id, String measureType){
     	//System.out.println("---> Reading Person by id = "+id);
@@ -109,14 +175,34 @@ public class PeopleImpl implements People {
         }
     	return history;
     }
-    //Method #7
+    
+    
+    /**
+     * This method is used to get all measureTypes used for the people 
+     * stored in the database 
+     * 
+     * Method #7: readMeasureTypes() 
+     * 
+     */
     @Override
     public List<String> readMeasureTypes(){
     	List<String> l = HealthMeasureHistory.getMeasureTypes();
     	return HealthMeasureHistory.getMeasureTypes();
     }
 
-    //Method #8
+    
+    
+    /**
+     * This method is used to get the value of a specified "measureType" for 
+     * a person identified by "id"
+     * 
+     * Method #8: readPersonMeasure(int id, String measureType, int mid)
+     * 
+     * @param id is the person id 
+     * @param measureType is the measure type (e.g: weight) for which we want get the value
+     * @param mid is the id of the measure
+     * 
+     */
 	@Override
 	public int readPersonMeasure(int id, String measureType, int mid) {
 		Person p = Person.getPersonById(id);
@@ -132,6 +218,15 @@ public class PeopleImpl implements People {
 	}
 
 	//Method #9
+	/**
+	 * This method is used for saving a new person measure.
+	 * 
+	 * @param id is the id of the person
+	 * @param measure is the object containing all measure information to save
+	 * 
+	 * Method #9: savePersonMeasure(int id, HealthMeasureHistory m)
+	 * 
+	 */
 	@Override
 	public List<HealthMeasureHistory> savePersonMeasure(int id, HealthMeasureHistory measure) throws ParseException {
 		Person p = Person.getPersonById(id);
@@ -145,12 +240,24 @@ public class PeopleImpl implements People {
 	}
 
 	//Method #10
+	/**
+	 * This method is used for updating the "measure" of a specified person 
+	 * identified by "id"
+	 * 
+	 * Method #10: updatePersonMeasure(int id, HealthMeasureHistory m)
+	 * 
+	 * @param id is the id of a person
+	 * @param measure is the measure object containing all information for updating the HealthMeasureHistory
+	 * 
+	 */
 	@Override
 	public HealthMeasureHistory updatePersonMeasure(int id, HealthMeasureHistory measure) throws ParseException {
 		Person p = Person.getPersonById(id);
 		
 		
 		HealthMeasureHistory existing = HealthMeasureHistory.getHealthMeasureHistoryById(measure.getIdMeasureHistory());
+		
+		
 		existing.setMeasureType(measure.getMeasureType());
 		existing.setTimestamp(measure.getTimestamp());
 		existing.setMeasureValueType(measure.getMeasureValueType());

@@ -120,6 +120,8 @@
                 </classpath>
             </java>
         </target>
+    	
+    	<!--
         <target name="execute.client">
             <echo message="ant execute.client introsde.document.client.PeopleClient in ${build.dir}" />
             <java classname="introsde.assignment.soap.client.PeopleClient" classpath="${build.dir}" fork="true">
@@ -133,6 +135,8 @@
                 </classpath>
             </java>
         </target>
+    	-->
+    	
         <!-- Run the JUnit Tests -->
         <!-- Output is XML, could also be plain-->
         <target name="junit">

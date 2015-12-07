@@ -55,7 +55,7 @@ public class Person implements Serializable {
     @Column(name="username")
     private String username;
     
-    @Temporal(TemporalType.DATE) // defines the precision of the date attribute
+    @Temporal(TemporalType.DATE) 
     @Column(name="birthdate")
     private Date birthdate; 
     
@@ -65,9 +65,7 @@ public class Person implements Serializable {
     @OneToMany(mappedBy="person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private List<HealthMeasureHistory> healthMeasureHistories; 
     
-    // add below all the getters and setters of all the private attributes
     
-    // getters
     @XmlElement(name="personId")
     public int getIdPerson(){
         return idPerson;
